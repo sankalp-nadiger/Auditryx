@@ -28,6 +28,33 @@ const AppProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Dummy dashboard data
+  const [data] = useState({
+    downloads: 1200,
+    users: 350,
+    goals: 42,
+    alerts: 7,
+    sales: [
+      { month: 'Jan', revenue: 4000, profit: 2400 },
+      { month: 'Feb', revenue: 3000, profit: 1398 },
+      { month: 'Mar', revenue: 2000, profit: 9800 },
+      { month: 'Apr', revenue: 2780, profit: 3908 },
+      { month: 'May', revenue: 1890, profit: 4800 },
+      { month: 'Jun', revenue: 2390, profit: 3800 },
+      { month: 'Jul', revenue: 3490, profit: 4300 },
+    ],
+    demographics: [
+      { name: 'Male', value: 60, color: '#8884d8' },
+      { name: 'Female', value: 40, color: '#82ca9d' },
+    ],
+    activities: [
+      { type: 'download', description: 'User A downloaded a report', time: '2 hours ago' },
+      { type: 'user', description: 'User B signed up', time: '3 hours ago' },
+      { type: 'goal', description: 'Goal C achieved', time: '5 hours ago' },
+      { type: 'alert', description: 'Alert D triggered', time: '1 day ago' },
+    ],
+  });
+
   const value = {
     currentPage,
     setCurrentPage,
@@ -40,7 +67,8 @@ const AppProvider = ({ children }) => {
     user,
     setUser,
     sidebarOpen,
-    setSidebarOpen
+    setSidebarOpen,
+    data,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

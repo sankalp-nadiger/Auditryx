@@ -1,176 +1,108 @@
+import React from 'react';
+import { useApp } from '../App.jsx';
 import { Download, Users, Target, AlertTriangle, Shield } from 'lucide-react';
 import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Line, PieChart, Pie, Cell } from 'recharts';
 import Badge from './Badge.jsx';
 
-const mockSuppliers = [
-  // ...existing mock data...
-];
+const Dashboard = () => {
+    const { data } = useApp();
 
-const mockMetrics = [
-  // ...existing mock data...
-];
+    if (!data) {
+        return <div>Loading...</div>;
+    }
 
-const mockTimeSeriesData = [
-  // ...existing mock data...
-];
-
-const mockRiskDistribution = [
-  // ...existing mock data...
-];
-
-const Card = ({ children, className = '' }) => (
-  <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
-    {children}
-  </div>
-);
-
-const Button = ({ variant = 'primary', size = 'md', children, className = '', ...props }) => {
-  const baseClasses = 'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
-  
-  const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-    secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-500',
-    outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-blue-500',
-    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
-  };
-  
-  const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-sm',
-    lg: 'px-6 py-3 text-base'
-  };
-  
-  return (
-    <button
-      className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-};
-
-const DashboardPage = () => {
-  const totalSuppliers = mockSuppliers.length;
-  const avgScore = Math.round(mockSuppliers.reduce((sum, s) => sum + s.complianceScore, 0) / totalSuppliers);
-  const failedMetrics = mockMetrics.filter(m => m.status === 'fail').length;
-  const riskSuppliers = mockSuppliers.filter(s => s.riskLevel === 'high').length;
-  
-  return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
-        <Button variant="outline">
-          <Download className="w-4 h-4 mr-2" />
-          Export Report
-        </Button>
-      </div>
-      
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Suppliers</p>
-              <p className="text-2xl font-bold text-gray-900">{totalSuppliers}</p>
-            </div>
-            <Users className="w-8 h-8 text-blue-600" />
-          </div>
-        </Card>
-        
-        <Card className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Avg Compliance Score</p>
-              <p className="text-2xl font-bold text-gray-900">{avgScore}%</p>
-            </div>
-            <Target className="w-8 h-8 text-green-600" />
-          </div>
-        </Card>
-        
-        <Card className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Failed Metrics</p>
-              <p className="text-2xl font-bold text-gray-900">{failedMetrics}</p>
-            </div>
-            <AlertTriangle className="w-8 h-8 text-red-600" />
-          </div>
-        </Card>
-        
-        <Card className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">High Risk Suppliers</p>
-              <p className="text-2xl font-bold text-gray-900">{riskSuppliers}</p>
-            </div>
-            <Shield className="w-8 h-8 text-orange-600" />
-          </div>
-        </Card>
-      </div>
-      
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Compliance Trends</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={mockTimeSeriesData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="score" stroke="#2563eb" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
-        </Card>
-        
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Risk Distribution</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={mockRiskDistribution}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                dataKey="value"
-                label={({ name, value }) => `${name}: ${value}%`}
-              >
-                {mockRiskDistribution.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </Card>
-      </div>
-      
-      {/* Recent Activity */}
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-        <div className="space-y-4">
-          {mockMetrics.slice(0, 5).map((metric) => {
-            const supplier = mockSuppliers.find(s => s.id === metric.supplierId);
-            return (
-              <div key={metric.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <p className="font-medium text-gray-900">{supplier?.name}</p>
-                  <p className="text-sm text-gray-600">{metric.metricName}: {metric.value}%</p>
+    return (
+        <div className="p-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <div className="bg-white p-4 rounded-lg shadow">
+                    <div className="flex items-center">
+                        <div className="p-3 bg-blue-500 rounded-full">
+                            <Download className="text-white" />
+                        </div>
+                        <div className="ml-4">
+                            <h2 className="text-gray-600 text-sm">Downloads</h2>
+                            <p className="text-2xl font-bold">{data.downloads}</p>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Badge variant={metric.status === 'pass' ? 'success' : 'danger'}>
-                    {metric.status}
-                  </Badge>
-                  <span className="text-sm text-gray-500">{metric.date}</span>
+                <div className="bg-white p-4 rounded-lg shadow">
+                    <div className="flex items-center">
+                        <div className="p-3 bg-green-500 rounded-full">
+                            <Users className="text-white" />
+                        </div>
+                        <div className="ml-4">
+                            <h2 className="text-gray-600 text-sm">Users</h2>
+                            <p className="text-2xl font-bold">{data.users}</p>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            );
-          })}
+                <div className="bg-white p-4 rounded-lg shadow">
+                    <div className="flex items-center">
+                        <div className="p-3 bg-red-500 rounded-full">
+                            <Target className="text-white" />
+                        </div>
+                        <div className="ml-4">
+                            <h2 className="text-gray-600 text-sm">Goals</h2>
+                            <p className="text-2xl font-bold">{data.goals}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-white p-4 rounded-lg shadow">
+                    <div className="flex items-center">
+                        <div className="p-3 bg-yellow-500 rounded-full">
+                            <AlertTriangle className="text-white" />
+                        </div>
+                        <div className="ml-4">
+                            <h2 className="text-gray-600 text-sm">Alerts</h2>
+                            <p className="text-2xl font-bold">{data.alerts}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="mt-8 bg-white p-4 rounded-lg shadow">
+                <h2 className="text-gray-600 text-lg font-semibold">Sales Overview</h2>
+                <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={data.sales}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="revenue" stroke="#8884d8" />
+                        <Line type="monotone" dataKey="profit" stroke="#82ca9d" />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
+            <div className="mt-8 bg-white p-4 rounded-lg shadow">
+                <h2 className="text-gray-600 text-lg font-semibold">User Demographics</h2>
+                <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                        <Pie data={data.demographics} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" label>
+                            {data.demographics.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                        </Pie>
+                    </PieChart>
+                </ResponsiveContainer>
+            </div>
+            <div className="mt-8 bg-white p-4 rounded-lg shadow">
+                <h2 className="text-gray-600 text-lg font-semibold">Recent Activities</h2>
+                <div className="flex flex-col">
+                    {data.activities.map((activity, index) => (
+                        <div key={index} className="flex items-center justify-between p-2 border-b">
+                            <div className="flex items-center">
+                                <div className={`w-2.5 h-2.5 rounded-full mr-3 ${activity.type === 'download' ? 'bg-blue-500' : 'bg-green-500'}`} />
+                                <div>
+                                    <p className="text-sm text-gray-800">{activity.description}</p>
+                                    <p className="text-xs text-gray-500">{activity.time}</p>
+                                </div>
+                            </div>
+                            <Badge type={activity.type} />
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
-      </Card>
-    </div>
-  );
+    );
 };
 
-export default DashboardPage;
+export default Dashboard;

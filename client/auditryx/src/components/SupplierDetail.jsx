@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useApp } from '../App.jsx'; 
+import { useApp } from '../App.jsx';
 import {Plus, BarChart3, AlertTriangle, CheckCircle, MapPin, TrendingUp, TrendingDown, Edit, FileText, Target, Award } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 const Card = ({ children, className = '' }) => (

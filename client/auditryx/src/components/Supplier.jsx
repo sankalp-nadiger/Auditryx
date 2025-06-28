@@ -1,7 +1,31 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useApp } from '../App.jsx';
 import { Search, Plus, Filter, Users, Calendar, MapPin, Eye, Edit, Trash2 } from 'lucide-react';
 import Badge from './Badge.jsx';
+
+const mockSuppliers = [
+  {
+    id: 1,
+    name: "Acme Corp",
+    country: "Germany",
+    contactEmail: "contact@acme.com",
+    lastAudit: "2025-06-01",
+    complianceScore: 92,
+    riskLevel: "low",
+    status: "active"
+  },
+  {
+    id: 2,
+    name: "Beta Industries",
+    country: "Singapore",
+    contactEmail: "info@beta.sg",
+    lastAudit: "2025-05-15",
+    complianceScore: 78,
+    riskLevel: "medium",
+    status: "expiring_soon"
+  }
+  // Add more mock suppliers as needed
+];
 
 const Card = ({ children, className = '' }) => (
   <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>

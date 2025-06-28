@@ -1,6 +1,18 @@
-import React, { useState } from 'react';
-import { useApp } from '../App.jsx';
+import { useState } from 'react';
 import { Upload, CheckCircle, ArrowRight } from 'lucide-react';
+
+// Add Tailwind CSS
+const style = document.createElement('link');
+style.href = 'https://cdn.tailwindcss.com';
+style.rel = 'stylesheet';
+if (!document.head.querySelector('link[href="https://cdn.tailwindcss.com"]')) {
+  document.head.appendChild(style);
+}
+
+// Mock useApp hook since we don't have the actual App context
+const useApp = () => ({
+  setCurrentPage: (page) => console.log(`Navigate to ${page}`)
+});
 
 const Card = ({ children, className = '' }) => (
   <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
@@ -8,7 +20,7 @@ const Card = ({ children, className = '' }) => (
   </div>
 );
 
-const Button = ({ variant = 'primary', size = 'md', children, className = '', ...props }) => {
+const Button = ({ variant = 'primary', size = 'md', children, className = '', as, ...props }) => {
   const baseClasses = 'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
   
   const variants = {
@@ -24,13 +36,15 @@ const Button = ({ variant = 'primary', size = 'md', children, className = '', ..
     lg: 'px-6 py-3 text-base'
   };
   
+  const Component = as || 'button';
+  
   return (
-    <button
+    <Component
       className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
       {...props}
     >
       {children}
-    </button>
+    </Component>
   );
 };
 

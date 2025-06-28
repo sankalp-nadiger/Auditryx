@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Badge = ({ variant = 'default', children }) => {
   const variants = {
     default: 'bg-gray-100 text-gray-800',
