@@ -201,7 +201,6 @@ async def check_weather_impact(
         print("[Weather Impact] Invalid delivery_date format.")
         raise HTTPException(status_code=400, detail="Invalid delivery_date format. Use YYYY-MM-DD.")
 
-    # Fetch weather for the delivery date (using OpenWeather One Call Timemachine API)
 
     print(f"[Weather Impact] Using OW_API_KEY: {OW_API_KEY}")
     # Use 2.5 endpoint for current weather (no historical data in free tier)
