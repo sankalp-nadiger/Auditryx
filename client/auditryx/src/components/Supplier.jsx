@@ -2,8 +2,9 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../App.jsx';
 import { Search, Plus, Filter, Users, Calendar, MapPin, Eye, Edit, Trash2, X } from 'lucide-react';
-import Badge from './Badge.jsx';
-import Header from './Header.jsx';
+import { useNavigate } from 'react-router-dom';
+import Badge from './ui/Badge.jsx';
+import Header from './ui/Header.jsx';
 
 const Card = ({ children, className = '' }) => (
   <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
@@ -37,8 +38,10 @@ const Button = ({ variant = 'primary', size = 'md', children, className = '', ..
   );
 };
 
+
 const SuppliersPage = () => {
   const { setCurrentPage, setSelectedSupplier, searchQuery, setSearchQuery, user } = useApp();
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({ country: '', riskLevel: '', status: '' });
   const [showFilters, setShowFilters] = useState(false);
   const [suppliers, setSuppliers] = useState([]);
@@ -52,6 +55,7 @@ const SuppliersPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     country: '',
+    city: '',
     contactEmail: '',
     complianceScore: '',
     riskLevel: 'low',
@@ -162,10 +166,7 @@ const SuppliersPage = () => {
   const handleRowClick = (supplier) => {
     setSelectedSupplier(supplier);
     setCurrentPage('supplier-detail');
-    // Use react-router navigation to /suppliers/:id
-    if (window && window.location && window.history) {
-      window.history.pushState({}, '', `/suppliers/${supplier.id}`);
-    }
+    navigate(`/suppliers/${supplier.id}`);
   };
   
   const handleAddSupplier = async (e) => {
@@ -190,6 +191,7 @@ const SuppliersPage = () => {
       const supplierData = {
         name: formData.name.trim(),
         country: formData.country.trim(),
+        city: formData.city.trim(),
         contract_terms: contractTermsObj,
         risk_level: formData.riskLevel,
         compliance_score: complianceScoreValue,
@@ -211,6 +213,7 @@ const SuppliersPage = () => {
       setFormData({
         name: '',
         country: '',
+        city: '',
         contactEmail: '',
         complianceScore: '',
         riskLevel: 'low',
@@ -485,19 +488,19 @@ const SuppliersPage = () => {
                 
                 return (
                   <tr key={supplier.id} className="hover:bg-gray-50 cursor-pointer transition-colors duration-150" onClick={() => handleRowClick(supplier)}>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-left">
                       <div>
                         <p className="text-sm font-semibold text-gray-900">{supplier.name || 'N/A'}</p>
-                        <p className="text-sm text-gray-500">{supplier.contactEmail || 'N/A'}</p>
+                      
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-left">
                       <div className="flex items-center">
                         <MapPin className="w-4 h-4 text-gray-400 mr-2" />
                         <span className="text-sm text-gray-900">{supplier.country || 'N/A'}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-left">
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 text-gray-400 mr-2" />
                         <span className="text-sm text-gray-900">
@@ -505,17 +508,17 @@ const SuppliersPage = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-left">
                       <span className={`text-xl font-bold ${getScoreColor(complianceScore)}`}>
                         {complianceScore}%
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-left">
                       <Badge variant={getRiskBadgeVariant(riskLevel)}>
                         {riskLevel}
                       </Badge>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" onClick={e => e.stopPropagation()}>
+                    <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium" onClick={e => e.stopPropagation()}>
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => handleHideRow(supplier.id)}
@@ -548,7 +551,7 @@ const SuppliersPage = () => {
         </div>
       </Card>
       
-      {/* Empty State */}
+
       {filteredSuppliers.length === 0 && !loading && (
         <Card className="mt-6 shadow-sm border border-gray-200">
           <div className="p-12 text-center">
@@ -598,6 +601,7 @@ const SuppliersPage = () => {
                 />
               </div>
               
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Country <span className="text-red-500">*</span>
@@ -610,6 +614,20 @@ const SuppliersPage = () => {
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-150"
                   placeholder="Enter country"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  City/Town
+                </label>
+                <input
+                  type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleFormChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-150"
+                  placeholder="Enter city or town"
                 />
               </div>
               

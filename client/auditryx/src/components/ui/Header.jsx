@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { useApp } from '../App.jsx';
+import { useApp } from '../../App.jsx';
 import { Menu, Bell } from 'lucide-react';
 import Sidebar from './Sidebar.jsx';
 

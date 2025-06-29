@@ -1,6 +1,6 @@
 import React from 'react';
-import { useApp } from '../App.jsx';
-import { Home, Users, Upload, Settings, X } from 'lucide-react';
+import { useApp } from '../../App.jsx';
+import { Home, Users, Upload, Settings, X, Thermometer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ open, onClose, currentPage, setCurrentPage }) => {
@@ -9,6 +9,7 @@ const Sidebar = ({ open, onClose, currentPage, setCurrentPage }) => {
     { id: 'dashboard', label: 'Dashboard', icon: Home, path: '/dashboard' },
     { id: 'suppliers', label: 'Suppliers', icon: Users, path: '/suppliers' },
     { id: 'bulk-import', label: 'Bulk Import', icon: Upload, path: '/bulk-import' },
+    { id: 'weather', label: 'Weather Monitor', icon: Thermometer, path: '/weather' },
     { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
   ];
   return (

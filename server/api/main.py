@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import suppliers, compliance
+from .routers import suppliers, compliance, weather
 from .database import engine, Base
 from . import auth
 
@@ -8,7 +8,6 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Auditryx API")
 
-# ✅ ADD THIS BEFORE app.include_router()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -22,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ THEN INCLUDE ROUTERS
 app.include_router(suppliers.router)
 app.include_router(compliance.router)
+app.include_router(weather.router)
 app.include_router(auth.router)

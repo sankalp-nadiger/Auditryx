@@ -7,6 +7,7 @@ import SupplierDetail from './components/SupplierDetail.jsx';
 import BulkImport from './components/BulkImport.jsx';
 import Login from './components/Login.jsx';
 import AuditryxLanding from './components/LandingPage.jsx';
+import SupplierWeather from './components/Weather.jsx';
 
 const AppContext = createContext();
 
@@ -69,6 +70,7 @@ function App() {
         <Route path="/suppliers" element={<PrivateRoute><Supplier /></PrivateRoute>} />
         <Route path="/suppliers/:id" element={<PrivateRoute><SupplierDetail /></PrivateRoute>} />
         <Route path="/bulk-import" element={<PrivateRoute><BulkImport /></PrivateRoute>} />
+        <Route path="/weather" element={<PrivateRoute><SupplierWeather /></PrivateRoute>} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </AppProvider>

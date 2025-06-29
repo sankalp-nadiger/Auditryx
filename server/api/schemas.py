@@ -21,8 +21,10 @@ class User(UserBase):
 class SupplierBase(BaseModel):
     name: str
     country: str
+    city: Optional[str] = None
     contract_terms: Dict[str, str]
     risk_level: str
+    status: Optional[str] = None
     compliance_score: Optional[int] = 0
     last_audit: Optional[date] = None
 
@@ -34,6 +36,7 @@ class SupplierCreate(SupplierBase):
 class SupplierUpdate(BaseModel):
     name: Optional[str]
     country: Optional[str]
+    city: Optional[str] = None
     contract_terms: Optional[Dict[str, str]]
     compliance_score: Optional[int]
     last_audit: Optional[date]

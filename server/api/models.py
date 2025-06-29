@@ -18,6 +18,8 @@ class Supplier(Base):
     id              = Column(Integer, primary_key=True, index=True)
     name            = Column(String, nullable=False)
     country         = Column(String, nullable=False)
+    city            = Column(String, nullable=True)
+    status          = Column(String, nullable=True)
     contract_terms  = Column(JSON, nullable=False)
     compliance_score= Column(Integer, default=0)
     last_audit      = Column(Date, nullable=True)

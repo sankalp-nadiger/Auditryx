@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy.orm import Session
 from . import models, schemas
 
@@ -70,3 +71,28 @@ def update_compliance_record(db: Session, record_id: int, record_in: schemas.Com
     db.commit()
     db.refresh(record)
     return record
+
+def create_or_update_compliance_weather_delay(db: Session, supplier_id: int, delivery_date: str):
+    # Try to find an existing compliance record for this supplier and date with metric 'Delivery'
+    record = db.query(models.ComplianceRecord).filter(
+        models.ComplianceRecord.supplier_id == supplier_id,
+        models.ComplianceRecord.metric == 'Delivery',
+        models.ComplianceRecord.date_recorded == delivery_date
+    ).first()
+    if record:
+        record.status = 'Excused - Weather Delay'
+        db.commit()
+        db.refresh(record)
+        return record
+    # If not found, create a new one
+    new_record = models.ComplianceRecord(
+        supplier_id=supplier_id,
+        metric='Delivery',
+        date_recorded=delivery_date,
+        result=None,
+        status='Excused - Weather Delay'
+    )
+    db.add(new_record)
+    db.commit()
+    db.refresh(new_record)
+    return new_record
