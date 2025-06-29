@@ -1,3 +1,4 @@
+
 from pydantic import BaseModel
 from typing import Optional, List, Dict
 from datetime import date
@@ -12,17 +13,23 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     class Config:
-        orm_mode = True
+        from_attributes = True 
 
 # Supplier Schemas
+
 
 class SupplierBase(BaseModel):
     name: str
     country: str
     contract_terms: Dict[str, str]
+    risk_level: str
+    compliance_score: Optional[int] = 0
+    last_audit: Optional[date] = None
+
 
 class SupplierCreate(SupplierBase):
     pass
+
 
 class SupplierUpdate(BaseModel):
     name: Optional[str]
@@ -30,9 +37,11 @@ class SupplierUpdate(BaseModel):
     contract_terms: Optional[Dict[str, str]]
     compliance_score: Optional[int]
     last_audit: Optional[date]
+    risk_level: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True 
+
 
 class Supplier(SupplierBase):
     id: int
@@ -40,7 +49,7 @@ class Supplier(SupplierBase):
     last_audit: Optional[date]
 
     class Config:
-        orm_mode = True
+        from_attributes = True 
 
 # ComplianceRecord Schemas 
 
@@ -61,10 +70,12 @@ class ComplianceRecordUpdate(BaseModel):
     status: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True 
 
 class ComplianceRecord(ComplianceRecordBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+

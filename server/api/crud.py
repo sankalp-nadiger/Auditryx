@@ -1,18 +1,24 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
 
-def get_suppliers(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Supplier).offset(skip).limit(limit).all()
+def get_suppliers(db: Session, user_id: int, skip: int = 0, limit: int = 100):
+    return db.query(models.Supplier).filter(models.Supplier.user_id == user_id).offset(skip).limit(limit).all()
 
 def get_supplier_by_id(db: Session, supplier_id: int):
     return db.query(models.Supplier).filter(models.Supplier.id == supplier_id).first()
 
-def create_supplier(db: Session, supplier_in: schemas.SupplierCreate):
-    db_obj = models.Supplier(**supplier_in.dict())
-    db.add(db_obj)
-    db.commit()
-    db.refresh(db_obj)
-    return db_obj
+def create_supplier(db: Session, supplier_in: schemas.SupplierCreate, user_id: int):
+    try:
+        db_obj = models.Supplier(**supplier_in.dict(), user_id=user_id)
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        print("Supplier inserted successfully:", db_obj)
+        return db_obj
+    except Exception as e:
+        db.rollback()
+        print("Error inserting supplier:", e)
+        raise
 
 def update_supplier(db: Session, supplier_id: int, supplier_in: schemas.SupplierUpdate):
     db_obj = get_supplier_by_id(db, supplier_id)

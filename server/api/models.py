@@ -1,3 +1,4 @@
+
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, JSON, Float
 from sqlalchemy.orm import relationship
 from .database import Base
@@ -10,6 +11,8 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     full_name = Column(String)
 
+from sqlalchemy import ForeignKey
+
 class Supplier(Base):
     __tablename__ = "suppliers"
     id              = Column(Integer, primary_key=True, index=True)
@@ -18,6 +21,8 @@ class Supplier(Base):
     contract_terms  = Column(JSON, nullable=False)
     compliance_score= Column(Integer, default=0)
     last_audit      = Column(Date, nullable=True)
+    risk_level      = Column(String, nullable=True)
+    user_id         = Column(Integer, ForeignKey("users.id"), nullable=False)
     records         = relationship("ComplianceRecord", back_populates="supplier")
 
 class ComplianceRecord(Base):
