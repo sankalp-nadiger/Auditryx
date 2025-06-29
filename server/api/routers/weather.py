@@ -237,7 +237,7 @@ Advise if delivery may be affected and what actions to take. Format your respons
     # Update compliance record if adverse weather
     compliance_update = None
     if adverse:
-        # Find or create a compliance record for this supplier and delivery_date
+       
         from .. import crud
         compliance_update = crud.create_or_update_compliance_weather_delay(db, supplier_id, delivery_date)
 
